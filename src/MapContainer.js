@@ -6,8 +6,7 @@ export class MapContainer extends Component {
   state = {
     showingInfoWindow: false,
     activeMarker: {},
-    selectedPlace: {},
-    venues: []
+    selectedPlace: {}
   };
 
   onMarkerClick = (props, marker, e) =>
@@ -26,25 +25,8 @@ export class MapContainer extends Component {
     }
   };
 
-  componentDidMount() {
-    fetch('https://api.foursquare.com/v2/venues/explore?near=Waikiki&client_id=QW4WDLEUGK3RMYTPWRRP5V00JXXZI0HI1QBKYINHWWGTS3BJ&client_secret=RVLDYUW3HMSKXSL53LHLYIQNL1Q544ARWNK4B3ZDLAHWFJSF&v=20190201&query=bars')
-    .then(response => response.json())
-    .then(data => {
-      if(data.meta.code !== 200) {
-        alert('Error fetching data from FourSquare');
-      }
-
-      const places = data.response.groups[0].items;
-      this.setState({places: places})
-      console.log(places);
-
-      const venues = places.map(place => place.venue);
-      this.setState({venues: venues});
-    });
-  }
-
   render() {
-    const markers = this.state.venues.map(venue => (
+    const markers = this.props.venues.map(venue => (
       <Marker
         key={venue.id}
         onClick={this.onMarkerClick}

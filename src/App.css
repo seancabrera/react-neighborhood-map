@@ -30,3 +30,16 @@
     transform: rotate(360deg);
   }
 }
+
+.sidebar {
+  width: 400px;
+}
+
+.main {
+  display: flex;
+}
+
+.nav {
+  height: 50px;
+  line-height: 50px;
+}
