@@ -96,6 +96,7 @@ class App extends Component {
 
     this.infowindow.setContent(this.getInfoWindowContent(marker));
     this.infowindow.open(this.map, marker);
+    this.map.panTo(marker.position);
   }
 
   /*
@@ -156,11 +157,13 @@ class App extends Component {
         <nav className="nav">
           <h1>Waikiki Bars</h1>
         </nav>
+
         <main className="main">
           <ListView
             venues={this.state.venues}
             onFilterChanged={this.filterChanged}
-            onListItemClicked={this.listItemClicked}/>
+            onListItemClicked={this.listItemClicked}
+          />
           <MapContainer />
         </main>
       </div>

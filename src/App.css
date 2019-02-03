@@ -35,14 +35,15 @@
   width: 400px;
 }
 
-.main {
-  display: flex;
-}
-
 .nav {
   height: 50px;
   line-height: 50px;
 }
+
+.main {
+    display: flex;
+    flex-wrap: wrap;
+  }
 
 .nav h1 {
   margin: 0px;
@@ -56,4 +57,32 @@
 
 .filter {
   width: 90%;
+}
+
+.map-container {
+  width: 100vw;
+  height: calc(100vh - 50px);
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 800px) {
+  .list-view {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 10px;
+  }
+}
+
+@media(min-width: 801px) {
+  .main {
+    flex-wrap: nowrap;
+  }
+
+  .map-container {
+    width: calc(100vw);
+  }
 }
