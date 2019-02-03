@@ -30,7 +30,7 @@ class ListView extends React.Component {
     const venues = filteredVenues.map(venue => (
       <ListItem
         button
-
+        aria-label={venue.name}
         key={venue.id}
         selected={venue.selected}
         onClick={() => this.props.onListItemClicked(venue)}
