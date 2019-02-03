@@ -22,7 +22,16 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=GOOGLE_MAPS_KEY&v=3">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=GOOGLE_MAPS_KEY&v=3 onerror=googleMapsLoadError()">
+    </script>
+    <script>
+      function googleMapsLoadError() {
+        alert('Failed to load google maps');
+      }
+
+      function gm_authFailure() {
+        alert('Unable to load google maps. Failed to authenticate');
+      }
     </script>
     <title>React App</title>
   </head>
