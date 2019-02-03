@@ -22,22 +22,23 @@ class App extends Component {
 
   fetchFoursquareVenues() {
     fetch('https://api.foursquare.com/v2/venues/explore?near=Waikiki&client_id=QW4WDLEUGK3RMYTPWRRP5V00JXXZI0HI1QBKYINHWWGTS3BJ&client_secret=RVLDYUW3HMSKXSL53LHLYIQNL1Q544ARWNK4B3ZDLAHWFJSF&v=20190201&query=bars')
-    .then(response => response.json())
-    .then(data => {
-      if(data.meta.code !== 200) {
-        alert('Error fetching data from FourSquare');
-      }
+      .then(response => response.json())
+      .then(data => {
+        if(data.meta.code !== 200) {
+          alert('Error fetching data from FourSquare');
+        }
 
-      const places = data.response.groups[0].items;
-      this.setVenuesFromPlaces(places);
-      this.initMapAndMarkers();
-    });
+        const places = data.response.groups[0].items;
+        this.setVenuesFromPlaces(places);
+        this.initMapAndMarkers();
+      });
   }
 
   setVenuesFromPlaces(places) {
     let venues = places.map(place => place.venue);
     venues = venues.sort(this.sortByVenueName);
     this.setState({venues: venues});
+    console.log(venues);
   }
 
   sortByVenueName(a, b) {
@@ -75,7 +76,8 @@ class App extends Component {
         map: this.map,
         venue: venue,
         id: venue.id,
-        name: venue.name
+        name: venue.name,
+        location: venue.location
       });
 
       marker.addListener('click', () => {
@@ -90,8 +92,36 @@ class App extends Component {
   }
 
   openInfoWindowForMarker(marker) {
-    this.infowindow.setContent(marker.id + ': ' + marker.name);
+    // this.fetchFourSquareVenueDetails(marker);
+
+    this.infowindow.setContent(this.getInfoWindowContent(marker));
     this.infowindow.open(this.map, marker);
+  }
+
+  /*
+  * Leaving this in here for reference. It seems as though using
+  * the FourSquare details API makes this app go over the quota
+  * for the free account too quickly.
+  */
+  fetchFourSquareVenueDetails(marker) {
+    fetch(`https://api.foursquare.com/v2/venues/${marker.id}?client_id=QW4WDLEUGK3RMYTPWRRP5V00JXXZI0HI1QBKYINHWWGTS3BJ&client_secret=RVLDYUW3HMSKXSL53LHLYIQNL1Q544ARWNK4B3ZDLAHWFJSF&v=20190201`)
+      .then(response => response.json())
+      .then(data => {
+        if(data.meta.code !== 200) {
+          alert('Error fetching data from FourSquare');
+        }
+
+        this.infowindow.setContent(this.getInfoWindowContent(data.response.venue));
+        this.infowindow.open(this.map, marker);
+      });
+  }
+
+  getInfoWindowContent(venueDetails) {
+    return `
+      <h1>${venueDetails.name}</h1>
+      <p>${venueDetails.location.address}</p>
+    `;
+
   }
 
   setSelectedVenue(venue) {
@@ -123,7 +153,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <nav className="nav">Neighborhood Map</nav>
+        <nav className="nav">
+          <h1>Waikiki Bars</h1>
+        </nav>
         <main className="main">
           <ListView
             venues={this.state.venues}

@@ -2,6 +2,7 @@ import React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import TextField from '@material-ui/core/TextField';
 
 class ListView extends React.Component {
   state = {
@@ -28,6 +29,7 @@ class ListView extends React.Component {
     const venues = filteredVenues.map(venue => (
       <ListItem
         button
+
         key={venue.id}
         selected={venue.selected}
         onClick={() => this.props.onListItemClicked(venue)}
@@ -38,11 +40,13 @@ class ListView extends React.Component {
 
     return (
       <div className="list-view">
-        <input type="text"
-          value={this.state.filterValue}
+        <TextField
+          label="Filter..."
+          type="search"
+          margin="normal"
+          variant="outlined"
           onChange={this.handleFilterChange}
-          placeholder="Filter"
-          style={{width: '90%', margin: '10px'}}
+          className="filter"
         />
         <List component="nav">
           {venues}
