@@ -6,7 +6,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 class ListView extends React.Component {
   render() {
     const venues = this.props.venues.map(venue => (
-      <ListItem button component="a" hovercolor="black" key={venue.id}>
+      <ListItem
+        button
+        key={venue.id}
+        selected={venue.selected}
+        onClick={() => this.props.onItemClicked(venue)}
+      >
         <ListItemText primary={venue.name}></ListItemText>
       </ListItem>
     ));
