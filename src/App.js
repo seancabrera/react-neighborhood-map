@@ -13,6 +13,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.listItemClicked = this.listItemClicked.bind(this);
+    this.filterChanged = this.filterChanged.bind(this);
   }
 
   componentDidMount() {
@@ -107,12 +108,27 @@ class App extends Component {
     });
   }
 
+  filterChanged(filter) {
+    this.state.markers.forEach(marker => {
+      if(marker.name.toLowerCase().indexOf(filter.toLowerCase()) < 0) {
+        marker.setVisible(false);
+      } else {
+        marker.setVisible(true);
+      }
+    });
+
+    this.infowindow.close();
+  }
+
   render() {
     return (
       <div className="App">
         <nav className="nav">Neighborhood Map</nav>
         <main className="main">
-          <ListView venues={this.state.venues} onListItemClicked={this.listItemClicked}/>
+          <ListView
+            venues={this.state.venues}
+            onFilterChanged={this.filterChanged}
+            onListItemClicked={this.listItemClicked}/>
           <MapContainer />
         </main>
       </div>
