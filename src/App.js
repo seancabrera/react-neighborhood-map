@@ -95,8 +95,10 @@ class App extends Component {
   }
 
   getInfoWindowBasicContent(venue) {
+    const fourSquarePageURL = FourSquareAPI.getFourSquarePageUrl(venue.id);
+
     return `
-      <h1>${venue.name}</h1>
+      <h2><a href="${fourSquarePageURL}"" target="_blank">${venue.name}</a></h2>
       <p>${venue.location.address}</p>
     `;
   }

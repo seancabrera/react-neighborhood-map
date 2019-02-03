@@ -3,6 +3,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
+import FourSquareLogo from './powered-by-foursquare-grey.svg';
 
 class ListView extends React.Component {
   state = {
@@ -42,6 +43,7 @@ class ListView extends React.Component {
       <div className="list-view">
         {venues.length > 0 &&
           <div>
+            <img src={FourSquareLogo} className="foursquare-logo" alt="FourSquare logo"/>
             <TextField
               label="Filter..."
               type="search"

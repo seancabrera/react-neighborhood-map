@@ -40,6 +40,10 @@ export const getVenueDetails = (venueId) => {
     });
 }
 
+export const getFourSquarePageUrl = (venueId) => {
+  return `https://foursquare.com/v/${venueId}?ref=${CLIENT_ID}`;
+}
+
 function sortByVenueName(a, b) {
   if(a.name > b.name) return 1;
   if(b.name > a.name) return -1;

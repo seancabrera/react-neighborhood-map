@@ -86,3 +86,7 @@
     width: calc(100vw);
   }
 }
+
+.foursquare-logo {
+  width: 90%;
+}
