@@ -1,5 +1,5 @@
-const CLIENT_ID = 'QW4WDLEUGK3RMYTPWRRP5V00JXXZI0HI1QBKYINHWWGTS3BJ';
-const CLIENT_SECRET = 'RVLDYUW3HMSKXSL53LHLYIQNL1Q544ARWNK4B3ZDLAHWFJSF';
+const CLIENT_ID = 'CLIENT_ID';
+const CLIENT_SECRET = 'CLIENT_SECRET';
 
 export const getRecommendedVenues = () => {
   return fetch(`https://api.foursquare.com/v2/venues/explore?query=bars&near=Waikiki&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=20190201`)
