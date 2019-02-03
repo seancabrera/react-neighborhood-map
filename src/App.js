@@ -77,12 +77,14 @@ class App extends Component {
         venue: venue,
         id: venue.id,
         name: venue.name,
-        location: venue.location
+        location: venue.location,
+        animation: google.maps.Animation.DROP
       });
 
       marker.addListener('click', () => {
         this.openInfoWindowForMarker(marker);
-        this.setSelectedVenue(venue);
+        this.animateMarkerBounce(marker);
+        this.setSelectedListItem(venue);
       });
 
       return marker;
@@ -96,7 +98,13 @@ class App extends Component {
 
     this.infowindow.setContent(this.getInfoWindowContent(marker));
     this.infowindow.open(this.map, marker);
+
+  }
+
+  animateMarkerBounce(marker) {
     this.map.panTo(marker.position);
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(() => marker.setAnimation(null), 1000);
   }
 
   /*
@@ -125,7 +133,7 @@ class App extends Component {
 
   }
 
-  setSelectedVenue(venue) {
+  setSelectedListItem(venue) {
     this.state.venues.forEach(venue => venue.selected = false);
     venue.selected = true;
     this.setState({venues: this.state.venues});
