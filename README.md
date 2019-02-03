@@ -15,6 +15,10 @@ First clone or download the project:
 
 `git clone https://github.com/seancabrera/react-neighborhood-map`
 
+NOTE:
+In index.html, "GOOGLE_MAPS_KEY" must be replaced with a valid Google Maps API key.
+In FourSquareAPI.js, "CLIENT_ID" and "CLIENT_SECRET" must be replaced with valid keys from FourSquare.
+
 Then, in a terminal, navigate to the downloaded repository and run the following npm commands:
 
 `npm install`
