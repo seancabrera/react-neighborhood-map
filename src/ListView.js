@@ -40,17 +40,21 @@ class ListView extends React.Component {
 
     return (
       <div className="list-view">
-        <TextField
-          label="Filter..."
-          type="search"
-          margin="normal"
-          variant="outlined"
-          onChange={this.handleFilterChange}
-          className="filter"
-        />
-        <List component="nav">
-          {venues}
-        </List>
+        {venues.length > 0 &&
+          <div>
+            <TextField
+              label="Filter..."
+              type="search"
+              margin="normal"
+              variant="outlined"
+              onChange={this.handleFilterChange}
+              className="filter"
+            />
+            <List component="nav">
+              {venues}
+            </List>
+          </div>
+        }
       </div>
     );
   }
