@@ -17,20 +17,29 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.fetchFoursquareVenues();
+    this.fetchFoursquareVenues()
+      .then(places => {
+        this.setVenuesFromPlaces(places);
+        this.initMapAndMarkers();
+      })
+      .catch(() => alert('Error fetching venues from FourSquare'));
   }
 
   fetchFoursquareVenues() {
-    fetch('https://api.foursquare.com/v2/venues/explore?near=Waikiki&client_id=QW4WDLEUGK3RMYTPWRRP5V00JXXZI0HI1QBKYINHWWGTS3BJ&client_secret=RVLDYUW3HMSKXSL53LHLYIQNL1Q544ARWNK4B3ZDLAHWFJSF&v=20190201&query=bars')
-      .then(response => response.json())
-      .then(data => {
-        if(data.meta.code !== 200) {
-          alert('Error fetching data from FourSquare');
+    return fetch('https://api.foursquare.com/v2/venues/explore?near=Waikiki&client_id=QW4WDLEUGK3RMYTPWRRP5V00JXXZI0HI1QBKYINHWWGTS3BJ&client_secret=RVLDYUW3HMSKXSL53LHLYIQNL1Q544ARWNK4B3ZDLAHWFJSF&v=20190201&query=bars')
+      .then(response => {
+        if(!response.ok) {
+          throw Error('Error fetching FourSquare recommended venues');
         }
 
-        const places = data.response.groups[0].items;
-        this.setVenuesFromPlaces(places);
-        this.initMapAndMarkers();
+        return response.json()
+      })
+      .then(data => {
+        if(data.meta.code !== 200) {
+          throw Error('Error fetching FourSquare recommended venues');
+        }
+
+        return data.response.groups[0].items;
       });
   }
 
@@ -94,11 +103,19 @@ class App extends Component {
   }
 
   openInfoWindowForMarker(marker) {
-    // this.fetchFourSquareVenueDetails(marker);
+    let infoWindowContent = this.getInfoWindowBasicContent(marker);
 
-    this.infowindow.setContent(this.getInfoWindowContent(marker));
-    this.infowindow.open(this.map, marker);
-
+    this.fetchFourSquareVenueDetails(marker)
+      .then(venue => {
+          infoWindowContent += this.getInfoWindowAdditionalContent(venue);
+          this.infowindow.setContent(infoWindowContent);
+          this.infowindow.open(this.map, marker);
+        })
+        .catch(() => {
+          infoWindowContent += '<br> Unable to fetch additional details';
+          this.infowindow.setContent(infoWindowContent);
+          this.infowindow.open(this.map, marker);
+        });;
   }
 
   animateMarkerBounce(marker) {
@@ -108,29 +125,43 @@ class App extends Component {
   }
 
   /*
-  * Leaving this in here for reference. It seems as though using
-  * the FourSquare details API makes this app go over the quota
-  * for the free account too quickly.
+  * It seems as though using the FourSquare details API makes this
+  * app go over the quota for the free account too quickly...
   */
   fetchFourSquareVenueDetails(marker) {
-    fetch(`https://api.foursquare.com/v2/venues/${marker.id}?client_id=QW4WDLEUGK3RMYTPWRRP5V00JXXZI0HI1QBKYINHWWGTS3BJ&client_secret=RVLDYUW3HMSKXSL53LHLYIQNL1Q544ARWNK4B3ZDLAHWFJSF&v=20190201`)
-      .then(response => response.json())
-      .then(data => {
-        if(data.meta.code !== 200) {
-          alert('Error fetching data from FourSquare');
+    return fetch(`https://api.foursquare.com/v2/venues/${marker.id}?client_id=QW4WDLEUGK3RMYTPWRRP5V00JXXZI0HI1QBKYINHWWGTS3BJ&client_secret=RVLDYUW3HMSKXSL53LHLYIQNL1Q544ARWNK4B3ZDLAHWFJSF&v=20190201`)
+      .then(response => {
+        if(!response.ok) {
+          throw Error('this sucks');
         }
 
-        this.infowindow.setContent(this.getInfoWindowContent(data.response.venue));
-        this.infowindow.open(this.map, marker);
+        return response.json()
+      })
+      .then(data => {
+        if(data.meta.code !== 200) {
+          throw Error('Error fetching data from FourSquare');
+        }
+
+        return data.response.venue;
       });
   }
 
-  getInfoWindowContent(venueDetails) {
+  getInfoWindowBasicContent(venue) {
     return `
-      <h1>${venueDetails.name}</h1>
-      <p>${venueDetails.location.address}</p>
+      <h1>${venue.name}</h1>
+      <p>${venue.location.address}</p>
     `;
+  }
 
+  getInfoWindowAdditionalContent(venueDetails) {
+    let content = '';
+    if(venueDetails.description) {
+      content += `<p style="text-align: left;">${venueDetails.description}</p>`;
+    }
+    if(venueDetails.url) {
+      content += `<a href="${venueDetails.url}" target="_blank">${venueDetails.url}</a>`;
+    }
+    return content;
   }
 
   setSelectedListItem(venue) {
