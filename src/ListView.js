@@ -10,7 +10,7 @@ class ListView extends React.Component {
         button
         key={venue.id}
         selected={venue.selected}
-        onClick={() => this.props.onItemClicked(venue)}
+        onClick={() => this.props.onListItemClicked(venue)}
       >
         <ListItemText primary={venue.name}></ListItemText>
       </ListItem>

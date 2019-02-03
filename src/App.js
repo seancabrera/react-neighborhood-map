@@ -5,18 +5,15 @@ import MapContainer from './MapContainer';
 import './App.css';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.itemClicked = this.itemClicked.bind(this);
-  }
-
   state = {
     venues: [],
-    showingInfoWindow: false,
-    activeMarker: {},
-    selectedPlace: {},
     markers: []
   };
+
+  constructor(props) {
+    super(props);
+    this.listItemClicked = this.listItemClicked.bind(this);
+  }
 
   componentDidMount() {
     this.fetchFoursquareVenues();
@@ -42,13 +39,35 @@ class App extends Component {
     this.setState({venues: venues});
   }
 
+  sortByVenueName(a, b) {
+    if(a.name > b.name) return 1;
+    if(b.name > a.name) return -1;
+    return 0;
+  }
+
   initMapAndMarkers() {
+    this.initMap();
+    this.initMarkers();
+  }
+
+  initMap() {
     const waikiki = {lat: 21.289063, lng: -157.826991};
+
     this.map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
       center: waikiki
     });
-    const infowindow = new google.maps.InfoWindow();
+
+    this.infowindow = new google.maps.InfoWindow();
+
+    this.map.addListener('click', () => {
+      this.infowindow.close();
+      this.state.venues.forEach(venue => venue.selected = false);
+      this.setState({venues: this.state.venues});
+    });
+  }
+
+  initMarkers() {
     const markers = this.state.venues.map(venue => {
       const marker = new google.maps.Marker({
         position: {lat: venue.location.lat, lng: venue.location.lng},
@@ -59,30 +78,28 @@ class App extends Component {
       });
 
       marker.addListener('click', () => {
-        infowindow.setContent(marker.id + ': ' + marker.name);
-        infowindow.open(this.map, marker);
-        this.state.venues.forEach(venue => venue.selected = false);
-        venue.selected = true;
-        this.setState({venues: this.state.venues});
+        this.openInfoWindowForMarker(marker);
+        this.setSelectedVenue(venue);
       });
 
       return marker;
     });
-    this.map.addListener('click', () => {
-      infowindow.close();
-      this.state.venues.forEach(venue => venue.selected = false);
-      this.setState({venues: this.state.venues});
-    });
+
     this.setState({markers: markers});
   }
 
-  sortByVenueName(a, b) {
-    if(a.name > b.name) return 1;
-    if(b.name > a.name) return -1;
-    return 0;
+  openInfoWindowForMarker(marker) {
+    this.infowindow.setContent(marker.id + ': ' + marker.name);
+    this.infowindow.open(this.map, marker);
   }
 
-  itemClicked(venue) {
+  setSelectedVenue(venue) {
+    this.state.venues.forEach(venue => venue.selected = false);
+    venue.selected = true;
+    this.setState({venues: this.state.venues});
+  }
+
+  listItemClicked(venue) {
     this.state.markers.forEach(marker => {
       if(marker.id === venue.id) {
         google.maps.event.trigger(marker, 'click')
@@ -95,7 +112,7 @@ class App extends Component {
       <div className="App">
         <nav className="nav">Neighborhood Map</nav>
         <main className="main">
-          <ListView venues={this.state.venues} onItemClicked={this.itemClicked}/>
+          <ListView venues={this.state.venues} onListItemClicked={this.listItemClicked}/>
           <MapContainer />
         </main>
       </div>
