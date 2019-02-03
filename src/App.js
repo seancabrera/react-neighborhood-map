@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import ListView from './ListView';
 import MapContainer from './MapContainer';
+import * as FourSquareAPI from './FourSquareAPI'
 import './App.css';
 
 class App extends Component {
@@ -17,43 +18,12 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.fetchFoursquareVenues()
-      .then(places => {
-        this.setVenuesFromPlaces(places);
+    FourSquareAPI.getRecommendedVenues()
+      .then(venues => {
+        this.setState({venues: venues});
         this.initMapAndMarkers();
       })
       .catch(() => alert('Error fetching venues from FourSquare'));
-  }
-
-  fetchFoursquareVenues() {
-    return fetch('https://api.foursquare.com/v2/venues/explore?near=Waikiki&client_id=QW4WDLEUGK3RMYTPWRRP5V00JXXZI0HI1QBKYINHWWGTS3BJ&client_secret=RVLDYUW3HMSKXSL53LHLYIQNL1Q544ARWNK4B3ZDLAHWFJSF&v=20190201&query=bars')
-      .then(response => {
-        if(!response.ok) {
-          throw Error('Error fetching FourSquare recommended venues');
-        }
-
-        return response.json()
-      })
-      .then(data => {
-        if(data.meta.code !== 200) {
-          throw Error('Error fetching FourSquare recommended venues');
-        }
-
-        return data.response.groups[0].items;
-      });
-  }
-
-  setVenuesFromPlaces(places) {
-    let venues = places.map(place => place.venue);
-    venues = venues.sort(this.sortByVenueName);
-    this.setState({venues: venues});
-    console.log(venues);
-  }
-
-  sortByVenueName(a, b) {
-    if(a.name > b.name) return 1;
-    if(b.name > a.name) return -1;
-    return 0;
   }
 
   initMapAndMarkers() {
@@ -105,7 +75,7 @@ class App extends Component {
   openInfoWindowForMarker(marker) {
     let infoWindowContent = this.getInfoWindowBasicContent(marker);
 
-    this.fetchFourSquareVenueDetails(marker)
+    FourSquareAPI.getVenueDetails(marker.id)
       .then(venue => {
           infoWindowContent += this.getInfoWindowAdditionalContent(venue);
           this.infowindow.setContent(infoWindowContent);
@@ -122,28 +92,6 @@ class App extends Component {
     this.map.panTo(marker.position);
     marker.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(() => marker.setAnimation(null), 1000);
-  }
-
-  /*
-  * It seems as though using the FourSquare details API makes this
-  * app go over the quota for the free account too quickly...
-  */
-  fetchFourSquareVenueDetails(marker) {
-    return fetch(`https://api.foursquare.com/v2/venues/${marker.id}?client_id=QW4WDLEUGK3RMYTPWRRP5V00JXXZI0HI1QBKYINHWWGTS3BJ&client_secret=RVLDYUW3HMSKXSL53LHLYIQNL1Q544ARWNK4B3ZDLAHWFJSF&v=20190201`)
-      .then(response => {
-        if(!response.ok) {
-          throw Error('this sucks');
-        }
-
-        return response.json()
-      })
-      .then(data => {
-        if(data.meta.code !== 200) {
-          throw Error('Error fetching data from FourSquare');
-        }
-
-        return data.response.venue;
-      });
   }
 
   getInfoWindowBasicContent(venue) {
