@@ -7,8 +7,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 ReactDOM.render((
   <div>
-  <CssBaseline/>
-  <App />
+    <CssBaseline/>
+    <App />
   </div>
   ), document.getElementById('root'));
 
