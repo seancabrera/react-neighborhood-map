@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import ListView from './ListView';
-import MapContainer from './MapContainer';
+import ResponsiveDrawer from './ResponsiveDrawer';
 import * as FourSquareAPI from './FourSquareAPI';
 import './App.css';
 
@@ -37,22 +36,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <nav className="nav">
-          <h1>Waikiki Bars</h1>
-        </nav>
-
-        <main className="main">
-          <ListView
-            venues={this.state.venues}
-            onFilterChanged={this.filterChanged}
-            onListItemClicked={this.setSelectedVenue}
-          />
-          <MapContainer
-            venues={this.state.venues}
-            onMarkerClicked={this.setSelectedVenue}
-            filter={this.state.filter}
-          />
-        </main>
+        <ResponsiveDrawer
+          venues={this.state.venues}
+          filterChanged={this.filterChanged}
+          setSelectedVenue={this.setSelectedVenue}
+          filter={this.state.filter}
+        />
       </div>
     );
   }

@@ -43,7 +43,9 @@ class ListView extends React.Component {
       <div className="list-view">
         {venues.length > 0 &&
           <div>
-            <img src={FourSquareLogo} className="foursquare-logo" alt="FourSquare logo"/>
+            <div className="foursquare-logo">
+              <img src={FourSquareLogo} alt="FourSquare logo"/>
+            </div>
             <TextField
               label="Filter..."
               type="search"

@@ -49,19 +49,28 @@
   margin: 0px;
 }
 
-.list-view {
-  width: 400px;
-  height: calc(100vh - 50px);
-  overflow-y: auto;
+.list-view .filter {
+  width: 210px;
+  margin-left: 15px;
 }
 
-.filter {
-  width: 90%;
+@media (min-width: 600px) {
+  .map-container {
+    width: 100%;
+    height: calc(100vh - 64px);
+  }
+
+  .list-view .filter {
+    width: 210px;
+    margin-left: 10px;
+  }
 }
 
-.map-container {
-  width: 100vw;
-  height: calc(100vh - 50px);
+@media (max-width: 599px) {
+  .map-container {
+    width: 100%;
+    height: calc(100vh - 56px);
+  }
 }
 
 #map {
@@ -69,24 +78,9 @@
   height: 100%;
 }
 
-@media (max-width: 800px) {
-  .list-view {
-    width: 100%;
-    height: 300px;
-    margin-bottom: 10px;
-  }
-}
-
-@media(min-width: 801px) {
-  .main {
-    flex-wrap: nowrap;
-  }
-
-  .map-container {
-    width: calc(100vw);
-  }
-}
-
 .foursquare-logo {
-  width: 90%;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 210px;
 }
