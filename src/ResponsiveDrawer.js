@@ -9,13 +9,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import ListView from './ListView';
+import Sidebar from './Sidebar';
 import MapContainer from './MapContainer';
 
 // This file was taken from the Material UI component demos at:
 // https://github.com/mui-org/material-ui/blob/master/docs/src/pages/demos/drawers/ResponsiveDrawer.js
 // It was modified for the purposes of this app. THe modifications
-// include rendering the ListView and MapContainer components
+// include rendering the Sidebar and MapContainer components
 // in the proper sections of the render() function.
 const drawerWidth = 240;
 
@@ -52,23 +52,30 @@ const styles = theme => ({
 });
 
 class ResponsiveDrawer extends React.Component {
-  state = {
-    mobileOpen: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {mobileOpen: false};
+    this.handleListItemClicked = this.handleListItemClicked.bind(this);
+  }
 
   handleDrawerToggle = () => {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
+
+  handleListItemClicked(venue) {
+    this.props.setSelectedVenue(venue);
+    this.setState({mobileOpen: false});
+  }
 
   render() {
     const { classes, theme } = this.props;
 
     const drawer = (
       <div>
-        <ListView
+        <Sidebar
             venues={this.props.venues}
             onFilterChanged={this.props.filterChanged}
-            onListItemClicked={this.props.setSelectedVenue}
+            onListItemClicked={this.handleListItemClicked}
           />
       </div>
     );

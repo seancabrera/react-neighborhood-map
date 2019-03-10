@@ -2,32 +2,22 @@ import React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import TextField from '@material-ui/core/TextField';
-import FourSquareLogo from './powered-by-foursquare-grey.svg';
 
 class ListView extends React.Component {
-  state = {
-    filterValue: ''
-  };
-
-  constructor(props) {
-    super(props);
-    this.handleFilterChange = this.handleFilterChange.bind(this);
-  }
-
-  handleFilterChange(event) {
-    this.setState({filterValue: event.target.value});
-    this.props.onFilterChanged(event.target.value);
-  }
-
   render() {
-    const filteredVenues = this.props.venues.filter(venue => {
-      if(!this.state.filterValue) return true;
+    const filteredVenuesListItems = this.getFilteredVenuesListItems();
 
-      return venue.name.toLowerCase().indexOf(this.state.filterValue.toLowerCase()) > -1;
-    });
+    return (
+      <List component="nav">
+        {filteredVenuesListItems}
+      </List>
+    );
+  }
 
-    const venues = filteredVenues.map(venue => (
+  getFilteredVenuesListItems() {
+    const filteredVenues = this.getFilteredVenues();
+
+    return filteredVenues.map(venue => (
       <ListItem
         button
         aria-label={venue.name}
@@ -38,29 +28,14 @@ class ListView extends React.Component {
         <ListItemText primary={venue.name}></ListItemText>
       </ListItem>
     ));
+  }
 
-    return (
-      <div className="list-view">
-        {venues.length > 0 &&
-          <div>
-            <div className="foursquare-logo">
-              <img src={FourSquareLogo} alt="FourSquare logo"/>
-            </div>
-            <TextField
-              label="Filter..."
-              type="search"
-              margin="normal"
-              variant="outlined"
-              onChange={this.handleFilterChange}
-              className="filter"
-            />
-            <List component="nav">
-              {venues}
-            </List>
-          </div>
-        }
-      </div>
-    );
+  getFilteredVenues() {
+    return this.props.venues.filter(venue => {
+      if(!this.props.filterValue) return true;
+
+      return venue.name.toLowerCase().indexOf(this.props.filterValue.toLowerCase()) > -1;
+    });
   }
 }
 
