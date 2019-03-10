@@ -1,5 +1,5 @@
-const CLIENT_ID = 'CLIENT_ID';
-const CLIENT_SECRET = 'CLIENT_SECRET';
+const CLIENT_ID = process.env.REACT_APP_FOURSQUARE_API_CLIENT_ID;
+const CLIENT_SECRET = process.env.REACT_APP_FOURSQUARE_API_CLIENT_SECRET;
 
 export const getRecommendedVenues = () => {
   return fetch(`https://api.foursquare.com/v2/venues/explore?query=bars&near=Waikiki&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=20190201`)
