@@ -7,7 +7,10 @@ The goal of this project was to build a neighborhood map using React, Google Map
 
 The app shows bars in Waikiki recommended from FourSquare. Selecting a bar either in the list view or on the map will show additional details of the bar
 
-## Instructions
+## Live Demo
+https://react-neighborhood-map-cabrera.herokuapp.com/
+
+## Local Build Instructions
 
 The following instructions can be used to run a production build of the app locally.
 
