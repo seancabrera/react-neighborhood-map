@@ -2,7 +2,7 @@ const CLIENT_ID = process.env.REACT_APP_FOURSQUARE_API_CLIENT_ID;
 const CLIENT_SECRET = process.env.REACT_APP_FOURSQUARE_API_CLIENT_SECRET;
 
 export const getRecommendedVenues = () => {
-  return fetch(`https://api.foursquare.com/v2/venues/explore?query=bars&near=Waikiki&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=20190201`)
+  return fetch(`https://api.foursquare.com/v2/venues/explore?query=restaurants&near=Colorado Springs&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=20190201`)
     .then(response => {
       if(!response.ok) {
         throw Error('Error fetching recommended venues from FourSquare');

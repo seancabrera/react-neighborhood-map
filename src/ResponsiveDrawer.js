@@ -94,7 +94,7 @@ class ResponsiveDrawer extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" noWrap>
-              Waikiki Bars
+              Colorado Springs Restaurants
             </Typography>
           </Toolbar>
         </AppBar>

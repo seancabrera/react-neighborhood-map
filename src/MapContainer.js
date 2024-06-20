@@ -47,10 +47,10 @@ class MapContainer extends React.Component {
 
   initMap() {
     // const waikiki = {lat: 21.289063, lng: -157.826991};
-    const waikiki = {lat: 21.284063, lng: -157.831000};
+    const waikiki = {lat: 38.86, lng: -104.8214};
 
     this.map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 14,
+      zoom: 12,
       center: waikiki
     });
 
