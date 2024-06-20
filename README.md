@@ -5,7 +5,7 @@
 
 The goal of this project was to build a neighborhood map using React, Google Maps and a 3rd party data API. I chose to use FourSquare as the 3rd party API.
 
-The app shows bars in Waikiki recommended from FourSquare. Selecting a bar either in the list view or on the map will show additional details of the bar
+The app shows restaurants in Colorado Springs recommended from FourSquare. Selecting a bar either in the list view or on the map will show additional details of the bar
 
 ## Live Demo
 https://react-neighborhood-map-b1cc1abb1146.herokuapp.com/
